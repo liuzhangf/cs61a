@@ -3,7 +3,7 @@
 (define (pow base exp) 
   (if (= exp 0)
     1
-    (if (= (remainder exp 2) 1)
+    (if (= ( exp 2) 1)
       (* base ( pow (* base base) (/ ( - exp 1) 2)))
       (pow (* base base) (/ exp 2))
     )
