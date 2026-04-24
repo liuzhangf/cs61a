@@ -37,7 +37,7 @@ def do_define_form(expressions, env):
         validate_form(expressions, 2, 2) # Checks that expressions is a list of length exactly 2
         # BEGIN PROBLEM 4
         "*** YOUR CODE HERE ***"
-        env.define( signature ,scheme_eval(expressions.rest.first, env) )
+        env.define( signature ,scheme_eval( expressions.rest.first, env, False) )
         return signature
         # END PROBLEM 4
     elif isinstance(signature, Link) and scheme_symbolp(signature.first):
@@ -47,7 +47,6 @@ def do_define_form(expressions, env):
         name = signature.first
         parameter = signature.rest
         body = expressions.rest
-
         formula = Link(parameter, body)
         new_expression = do_lambda_form(formula, env)
         env.define(name, new_expression)
@@ -111,9 +110,9 @@ def do_if_form(expressions, env):
     """
     validate_form(expressions, 2, 3)
     if is_scheme_true(scheme_eval(expressions.first, env)):
-        return scheme_eval(expressions.rest.first, env)
+        return scheme_eval(expressions.rest.first, env, True)
     elif len_link(expressions) == 3:
-        return scheme_eval(expressions.rest.rest.first, env)
+        return scheme_eval(expressions.rest.rest.first, env, True)
 
 def do_and_form(expressions, env):
     """Evaluate a (short-circuited) and form.
@@ -140,7 +139,7 @@ def do_and_form(expressions, env):
         if not cur_ans and cur_ans is not 0:
             return False
         cur_state = cur_state.rest
-    cur_ans = scheme_eval( cur_state.first, env)
+    cur_ans = scheme_eval( cur_state.first, env, True)
     if not cur_ans and cur_ans is not  0:
             return False
     return cur_ans
@@ -170,7 +169,7 @@ def do_or_form(expressions, env):
         if cur_ans or cur_ans is 0:
             return cur_ans
         cur_state = cur_state.rest
-    cur_ans = scheme_eval( cur_state.first, env)
+    cur_ans = scheme_eval( cur_state.first, env, True)
     return cur_ans
     # END PROBLEM 12
 
@@ -270,8 +269,6 @@ def do_mu_form(expressions, env):
     "*** YOUR CODE HERE ***"
     return MuProcedure(expressions.first, expressions.rest)
     # END PROBLEM 11
-
-
 
 SPECIAL_FORMS = {
     'and': do_and_form,

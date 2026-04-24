@@ -96,7 +96,7 @@ def eval_all(expressions, env):
     while cur_state.rest is not nil:
         scheme_eval(cur_state.first, env)
         cur_state = cur_state.rest
-    return scheme_eval(cur_state.first, env)
+    return scheme_eval(cur_state.first, env, True)
     # END PROBLEM 6
 
 ###################################
@@ -132,24 +132,14 @@ def optimize_tail_calls(unoptimized_scheme_eval):
         result = Unevaluated(expr, env)
         # BEGIN OPTIONAL PROBLEM 2
         "*** YOUR CODE HERE ***"
+        while isinstance( result, Unevaluated ):
+            result = unoptimized_scheme_eval(result.expr, result.env)
         # END OPTIONAL PROBLEM 2
+        return result
     return optimized_eval
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ################################################################
 # Uncomment the following line to apply tail call optimization #
 ################################################################
 
-# scheme_eval = optimize_tail_calls(scheme_eval)
+scheme_eval = optimize_tail_calls(scheme_eval)
